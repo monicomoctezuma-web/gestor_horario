@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicializar Usuarios - Gestor de Horarios</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #7b2cbf 0%, #9d4edd 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #7b2cbf;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .info-box {
+            background: #f5f3ff;
+            border-left: 4px solid #7b2cbf;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .info-box h3 {
+            color: #7b2cbf;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            margin: 5px 0;
+            color: #333;
+        }
+
+        .btn-init {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #7b2cbf, #9d4edd);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .btn-init:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(123, 44, 191, 0.3);
+        }
+
+        .btn-init:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        #result {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .credentials {
+            background: #e0aaff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .credentials h3 {
+            color: #5a189a;
+            margin-bottom: 15px;
+        }
+
+        .credential-item {
+            background: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #7b2cbf;
+        }
+
+        .credential-item strong {
+            color: #7b2cbf;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .btn-login:hover {
+            background: #059669;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #7b2cbf;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Inicializar Sistema</h1>
+        <p class="subtitle">Crea los usuarios iniciales del sistema</p>
+
+        <div class="info-box">
+            <h3>📝 ¿Qué hace este proceso?</h3>
+            <p>Este proceso creará automáticamente 3 usuarios en tu base de datos Firestore:</p>
+            <br>
+            <p><strong>👑 Subdirector:</strong> admin / admin123</p>
+            <p><strong>👨‍💼 Jefe de Departamento:</strong> jefe1 / jefe123</p>
+            <p><strong>👨‍🏫 Docente:</strong> docente1 / docente123</p>
+        </div>
+
+        <button id="btnInit" class="btn-init" onclick="inicializarUsuarios()">
+            🚀 Crear Usuarios Ahora
+        </button>
+
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; color: #7b2cbf;">Creando usuarios...</p>
+        </div>
+
+        <div id="result"></div>
+
+        <div id="credentials" class="credentials" style="display: none;">
+            <h3>✅ ¡Usuarios Creados Exitosamente!</h3>
+            
+            <div class="credential-item">
+                <strong>Subdirector</strong><br>
+                Usuario: admin<br>
+                Contraseña: admin123
+            </div>
+
+            <div class="credential-item">
+                <strong>Jefe de Departamento</strong><br>
+                Usuario: jefe1<br>
+                Contraseña: jefe123
+            </div>
+
+            <div class="credential-item">
+                <strong>Docente</strong><br>
+                Usuario: docente1<br>
+                Contraseña: docente123
+            </div>
+
+            <button id="btnGoLogin" class="btn-login" onclick="irAlLogin()">
+                ➡️ Ir al Login
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { db } from './js/config/firebase.js';
+        import { 
+            collection, 
+            addDoc,
+            getDocs,
+            query,
+            where
+        } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+        window.inicializarUsuarios = async function() {
+            const btnInit = document.getElementById('btnInit');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('result');
+            const credentials = document.getElementById('credentials');
+            const btnGoLogin = document.getElementById('btnGoLogin');
+
+            // Deshabilitar botón
+            btnInit.disabled = true;
+            btnInit.textContent = 'Procesando...';
+            loading.style.display = 'block';
+            result.style.display = 'none';
+
+            try {
+                const usuarios = [
+                    {
+                        usuario: 'admin',
+                        password: 'admin123',
+                        rol: 'subdirector',
+                        activo: true,
+                        fechaCreacion: new Date().toISOString()
+                    },
+                    {
+                        usuario: 'jefe1',
+                        password: 'jefe123',
+                        rol: 'jefe',
+                        activo: true,
+                        fechaCreacion: new Date().toISOString()
+                    },
+                    {
+                        usuario: 'docente1',
+                        password: 'docente123',
+                        rol: 'docente',
+                        activo: true,
+                        fechaCreacion: new Date().toISOString()
+                    }
+                ];
+
+                // Verificar si ya existen usuarios
+                const usuariosRef = collection(db, 'usuarios');
+                const querySnapshot = await getDocs(usuariosRef);
+
+                if (!querySnapshot.empty) {
+                    result.className = 'error';
+                    result.style.display = 'block';
+                    result.innerHTML = `
+                        <strong>⚠️ Atención:</strong><br>
+                        Ya existen usuarios en la base de datos. No se crearon usuarios duplicados.
+                        <br><br>
+                        Puedes usar las credenciales existentes para iniciar sesión.
+                    `;
+                    loading.style.display = 'none';
+                    btnInit.textContent = 'Usuarios Ya Existen';
+                    
+                    // Mostrar credenciales y botón de login de todos modos
+                    credentials.style.display = 'block';
+                    btnGoLogin.style.display = 'block';
+                    return;
+                }
+
+                // Crear usuarios
+                let creados = 0;
+                for (const usuario of usuarios) {
+                    await addDoc(collection(db, 'usuarios'), usuario);
+                    creados++;
+                }
+
+                // Éxito
+                loading.style.display = 'none';
+                result.className = 'success';
+                result.style.display = 'block';
+                result.innerHTML = `
+                    <strong>✅ ¡Éxito!</strong><br>
+                    Se crearon ${creados} usuarios correctamente en Firestore.
+                `;
+
+                // Mostrar credenciales
+                credentials.style.display = 'block';
+                btnGoLogin.style.display = 'block';
+                btnInit.style.display = 'none';
+
+            } catch (error) {
+                console.error('Error al crear usuarios:', error);
+                loading.style.display = 'none';
+                result.className = 'error';
+                result.style.display = 'block';
+                result.innerHTML = `
+                    <strong>❌ Error:</strong><br>
+                    ${error.message}
+                    <br><br>
+                    <strong>Posibles soluciones:</strong><br>
+                    1. Verifica que tu configuración de Firebase sea correcta<br>
+                    2. Asegúrate de tener conexión a Internet<br>
+                    3. Revisa las reglas de Firestore en Firebase Console
+                `;
+                btnInit.disabled = false;
+                btnInit.textContent = '🔄 Reintentar';
+            }
+        };
+
+        window.irAlLogin = function() {
+            window.location.href = 'index.html';
+        };
+    </script>
+</body>
+</html>

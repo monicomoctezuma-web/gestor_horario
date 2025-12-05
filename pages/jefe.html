@@ -1,0 +1,377 @@
+<!-- jefe.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jefe de Departamento - Gestor de Horarios</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="navbar-brand">🎓 Gestor de Horarios - Jefe de Departamento</div>
+            <div class="navbar-user">
+                <div class="user-info">
+                    <div class="user-name" id="userName">Usuario</div>
+                    <div class="user-role">Jefe de Departamento</div>
+                </div>
+                <button class="btn-logout" id="btnLogout">Cerrar Sesión</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" data-tab="materias">📚 Materias</button>
+                <button class="tab" data-tab="docentes">👨‍🏫 Docentes</button>
+                <button class="tab" data-tab="horarios">📅 Horarios</button>
+                <button class="tab" data-tab="grupos">👥 Grupos</button>
+                 <button class="tab" data-tab="aulas">🏫 Aulas</button>
+            </div>
+
+            <!-- Tab: Materias -->
+            <div id="tab-materias" class="tab-content active">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Gestión de Materias</h2>
+                        <button class="btn btn-primary" id="btnAgregarMateria">+ Agregar Materia</button>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Filtrar por Semestre</label>
+                            <select id="filtroSemestre">
+                                <option value="">Todos los semestres</option>
+                                <option value="1">Semestre 1</option>
+                                <option value="2">Semestre 2</option>
+                                <option value="3">Semestre 3</option>
+                                <option value="4">Semestre 4</option>
+                                <option value="5">Semestre 5</option>
+                                <option value="6">Semestre 6</option>
+                                <option value="7">Semestre 7</option>
+                                <option value="8">Semestre 8</option>
+                                <option value="9">Semestre 9</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="tablaMaterias">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Créditos</th>
+                                    <th>Semestre</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Docentes -->
+            <div id="tab-docentes" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Gestión de Docentes</h2>
+                        <button class="btn btn-primary" id="btnAgregarDocente">+ Agregar Docente</button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="tablaDocentes">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Horas Semanales</th>
+                                    <th>Materias Asignadas</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Horarios -->
+            <div id="tab-horarios" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Horarios por Semestre</h2>
+                        <div>
+                            <select id="semestreHorario" class="form-control" style="display: inline-block; width: 200px; margin-right: 10px;">
+                                <option value="1">Semestre 1</option>
+                                <option value="2">Semestre 2</option>
+                                <option value="3">Semestre 3</option>
+                                <option value="4">Semestre 4</option>
+                                <option value="5">Semestre 5</option>
+                                <option value="6">Semestre 6</option>
+                                <option value="7">Semestre 7</option>
+                                <option value="8">Semestre 8</option>
+                                <option value="9">Semestre 9</option>
+                            </select>
+                            <button class="btn btn-primary" id="btnCargarHorario">Cargar Horario</button>
+                        </div>
+                    </div>
+                    
+                    <div id="horarioContainer"></div>
+                </div>
+            </div>
+
+            <!-- Tab: Grupos -->
+<div id="tab-grupos" class="tab-content">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Gestión de Grupos</h2>
+            <div>
+                <select id="semestreGrupos" class="form-control" style="display: inline-block; width: 200px; margin-right: 10px;">
+                    <option value="1">Semestre 1</option>
+                    <option value="2">Semestre 2</option>
+                    <option value="3">Semestre 3</option>
+                    <option value="4">Semestre 4</option>
+                    <option value="5">Semestre 5</option>
+                    <option value="6">Semestre 6</option>
+                    <option value="7">Semestre 7</option>
+                    <option value="8">Semestre 8</option>
+                    <option value="9">Semestre 9</option>
+                </select>
+                <button class="btn btn-primary" id="btnCargarGrupos">Cargar Grupos</button>
+                <button class="btn btn-primary" id="btnAgregarGrupo">+ Agregar Grupo</button>
+            </div>
+        </div>
+        
+        <div class="table-container">
+          <table id="tablaGrupos">
+    <thead>
+        <tr>
+             <th>Grupo</th>
+            <th>Hora</th>
+            <th>Docente</th>
+            <th>Materia</th>
+            <th>Lun</th>
+            <th>Mar</th>
+            <th>Mié</th>
+            <th>Jue</th>
+            <th>Vie</th>
+            <th>Aula</th>
+            <th>Alumnos</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+
+        </div>
+    </div>
+</div>
+           
+    <!-- Tab: Aulas -->
+            <div id="tab-aulas" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Horarios por Aula</h2>
+                        <div>
+                            <select id="aulaSelect" class="form-control" style="display: inline-block; width: 200px; margin-right: 10px;">
+                                <option value="A-101">Aula A-101</option>
+                                <option value="A-102">Aula A-102</option>
+                                <option value="A-103">Aula A-103</option>
+                                <option value="A-104">Aula A-104</option>
+                                <option value="A-105">Aula A-105</option>
+                                <option value="A-106">Aula A-106</option>
+                                <option value="A-107">Aula A-107</option>
+                                <option value="A-108">Aula A-108</option>
+                                <option value="A-109">Aula A-109</option>
+                                <option value="A-110">Aula A-110</option>
+                                <option value="B-201">Aula B-201</option>
+                                <option value="B-202">Aula B-202</option>
+                                <option value="B-203">Aula B-203</option>
+                                <option value="B-204">Aula B-204</option>
+                                <option value="B-205">Aula B-205</option>
+                                <option value="C-301">Aula C-301</option>
+                                <option value="C-302">Aula C-302</option>
+                                <option value="C-303">Aula C-303</option>
+                                <option value="C-304">Aula C-304</option>
+                                <option value="C-305">Aula C-305</option>
+                            </select>
+                            <button class="btn btn-primary" id="btnCargarAula">Ver Horario</button>
+                        </div>
+                    </div>
+                    
+                    <div id="aulaContainer"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal Agregar/Editar Materia -->
+    <div id="modalMateria" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="tituloModalMateria">Agregar Materia</h3>
+                <button class="modal-close" id="closeModalMateria">&times;</button>
+            </div>
+            <form id="formMateria">
+                <input type="hidden" id="materiaId">
+                <div class="form-group">
+                    <label>Nombre de la Materia *</label>
+                    <input type="text" id="materiaNombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Créditos *</label>
+                    <input type="number" id="materiaCreditos" min="1" max="10" required>
+                </div>
+                <div class="form-group">
+                    <label>Semestre *</label>
+                    <select id="materiaSemestre" required>
+                        <option value="">Seleccione...</option>
+                        <option value="1">Semestre 1</option>
+                        <option value="2">Semestre 2</option>
+                        <option value="3">Semestre 3</option>
+                        <option value="4">Semestre 4</option>
+                        <option value="5">Semestre 5</option>
+                        <option value="6">Semestre 6</option>
+                        <option value="7">Semestre 7</option>
+                        <option value="8">Semestre 8</option>
+                        <option value="9">Semestre 9</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Agregar/Editar Docente -->
+    <div id="modalDocente" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="tituloModalDocente">Agregar Docente</h3>
+                <button class="modal-close" id="closeModalDocente">&times;</button>
+            </div>
+            <form id="formDocente">
+                <input type="hidden" id="docenteId">
+                <div class="form-group">
+                    <label>Nombre del Docente *</label>
+                    <input type="text" id="docenteNombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Horas Semanales *</label>
+                    <input type="number" id="docenteHoras" min="1" max="40" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </form>
+        </div>
+    </div>
+
+   <!-- Modal Horario -->
+    <div id="modalHorario" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Asignar Clase</h3>
+                <button class="modal-close" id="closeModalHorario">&times;</button>
+            </div>
+            <form id="formHorario">
+                <input type="hidden" id="horarioDia">
+                <input type="hidden" id="horarioHora">
+                <input type="hidden" id="horarioSemestre">
+                
+                <div class="form-group">
+                    <label>Día: <strong id="labelDia"></strong></label>
+                </div>
+                <div class="form-group">
+                    <label>Hora: <strong id="labelHora"></strong></label>
+                </div>
+                <div class="form-group">
+                    <label>Materia *</label>
+                    <select id="horarioMateria" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Docente *</label>
+                    <select id="horarioDocente" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Aula *</label>
+                    <input type="text" id="horarioAula" required placeholder="Ej: A-101">
+                </div>
+                <button type="submit" class="btn btn-primary">Asignar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Agregar/Editar Grupo -->
+    <div id="modalGrupo" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="tituloModalGrupo">Agregar Grupo</h3>
+                <button class="modal-close" id="closeModalGrupo">&times;</button>
+            </div>
+            <form id="formGrupo">
+                <input type="hidden" id="grupoId">
+                <input type="hidden" id="grupoSemestre">
+                
+                <div class="form-group">
+                    <label>Nombre del Grupo *</label>
+                    <input type="text" id="grupoNombre" required placeholder="Ej: Grupo A">
+                </div>
+                
+                <div class="form-group">
+                    <label>Docente *</label>
+                    <select id="grupoDocente" required>
+                        <option value="">Seleccione un docente...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Materia *</label>
+                    <select id="grupoMateria" required disabled>
+                        <option value="">Primero seleccione docente...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Cantidad de Alumnos *</label>
+                    <input type="number" id="grupoCantidadAlumnos" min="1" required placeholder="Mínimo 10 alumnos">
+                    <small style="color: #666; font-size: 0.85em;">
+                        💡 Mínimo: 10 alumnos | Máximo por grupo: 30 alumnos<br>
+                        Si ingresa más de 30, se crearán grupos adicionales automáticamente
+                    </small>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Guardar Grupo</button>
+            </form>
+        </div>
+    </div>
+ 
+    <!-- Script principal de la vista -->
+    <script type="module" src="../js/views/JefeView.js"></script>
+    
+    <!-- Script de corrección del logout (se ejecuta después) -->
+    <script type="module">
+        // Esperar a que el DOM esté listo
+        window.addEventListener('DOMContentLoaded', () => {
+            // Sobrescribir el evento del botón de logout con un pequeño delay
+            setTimeout(() => {
+                const btnLogout = document.getElementById('btnLogout');
+                if (btnLogout) {
+                    // Remover todos los eventos anteriores clonando el botón
+                    const newBtn = btnLogout.cloneNode(true);
+                    btnLogout.parentNode.replaceChild(newBtn, btnLogout);
+                    
+                    // Agregar el nuevo evento correcto
+                    newBtn.addEventListener('click', () => {
+                        localStorage.removeItem('usuarioSesion');
+                        window.location.href = '../index.html';
+                    });
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>

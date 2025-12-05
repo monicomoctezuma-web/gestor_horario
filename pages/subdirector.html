@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subdirector - Gestor de Horarios</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="navbar-brand">🎓 Gestor de Horarios - Subdirector</div>
+            <div class="navbar-user">
+                <div class="user-info">
+                    <div class="user-name" id="userName">Usuario</div>
+                    <div class="user-role">Subdirector</div>
+                </div>
+                <button class="btn-logout" id="btnLogout">Cerrar Sesión</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h1 class="page-title">Panel de Control - Subdirector</h1>
+
+            <!-- Estadísticas Generales -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                <div class="card" style="text-align: center;">
+                    <h3 style="color: var(--primary-purple); font-size: 36px; margin-bottom: 5px;" id="totalMaterias">0</h3>
+                    <p style="color: var(--text-light);">Total Materias</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <h3 style="color: var(--success); font-size: 36px; margin-bottom: 5px;" id="totalDocentes">0</h3>
+                    <p style="color: var(--text-light);">Total Docentes</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <h3 style="color: var(--secondary-purple); font-size: 36px; margin-bottom: 5px;" id="totalHoras">0</h3>
+                    <p style="color: var(--text-light);">Horas Asignadas</p>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <h3 style="color: var(--light-purple); font-size: 36px; margin-bottom: 5px;" id="porcentajeOcupacion">0%</h3>
+                    <p style="color: var(--text-light);">Ocupación</p>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" data-tab="usuarios">👥 Usuarios</button>
+                <button class="tab" data-tab="materias">📚 Materias</button>
+                <button class="tab" data-tab="docentes">👨‍🏫 Docentes</button>
+                <button class="tab" data-tab="horarios">📅 Horarios</button>
+            </div>
+
+            <!-- Tab: Usuarios -->
+            <div id="tab-usuarios" class="tab-content active">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Gestión de Usuarios</h2>
+                        <button class="btn btn-primary" id="btnAgregarUsuario">+ Crear Usuario</button>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Filtrar por Rol</label>
+                            <select id="filtroRol">
+                                <option value="">Todos los roles</option>
+                                <option value="subdirector">Subdirector</option>
+                                <option value="jefe">Jefe de Departamento</option>
+                                <option value="docente">Docentes (Accesos al Sistema)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="tablaUsuarios">
+                            <thead>
+                                <tr>
+                                    <th>Nombre / Docente</th>
+                                    <th>Usuario del Sistema</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Materias -->
+            <div id="tab-materias" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Vista General de Materias</h2>
+                    </div>
+                    
+                    <div id="materiasPorSemestre"></div>
+                </div>
+            </div>
+
+            <!-- Tab: Docentes -->
+            <div id="tab-docentes" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Vista General de Docentes</h2>
+                    </div>
+                    
+                    <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #2196f3;">
+                        <p style="margin: 0; color: #1565c0;">
+                            💡 <strong>Gestión de Accesos:</strong> Desde aquí puedes crear usuarios para que los docentes accedan al sistema.
+                        </p>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="tablaDocentes">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Usuario del Sistema</th>
+                                    <th>Horas Disponibles</th>
+                                    <th>Horas Ocupadas</th>
+                                    <th>Horas Libres</th>
+                                    <th>Materias</th>
+                                    <th style="width: 300px;">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Horarios -->
+            <div id="tab-horarios" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Vista General de Horarios</h2>
+                        <div>
+                            <select id="semestreHorario" style="padding: 8px; border-radius: 8px; border: 2px solid var(--border-color); margin-right: 10px;">
+                                <option value="1">Semestre 1</option>
+                                <option value="2">Semestre 2</option>
+                                <option value="3">Semestre 3</option>
+                                <option value="4">Semestre 4</option>
+                                <option value="5">Semestre 5</option>
+                                <option value="6">Semestre 6</option>
+                                <option value="7">Semestre 7</option>
+                                <option value="8">Semestre 8</option>
+                                <option value="9">Semestre 9</option>
+                            </select>
+                            <button class="btn btn-primary" id="btnCargarHorario">Ver Horario</button>
+                        </div>
+                    </div>
+                    
+                    <div id="horarioContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Usuario -->
+    <div id="modalUsuario" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="tituloModalUsuario">Crear Usuario</h3>
+                <button class="modal-close" id="closeModalUsuario">&times;</button>
+            </div>
+            <form id="formUsuario">
+                <input type="hidden" id="usuarioId">
+                <input type="hidden" id="docenteIdHidden">
+                
+                <!-- Info del docente (solo visible cuando se crea usuario para docente desde la tabla de docentes) -->
+                <div id="infoDocente" style="display: none; background: var(--bg-color); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--primary-purple);">
+                    <p style="margin: 0; color: var(--text-color); font-weight: 600;">
+                        👤 Docente: <span id="nombreDocenteDisplay" style="color: var(--primary-purple);"></span>
+                    </p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Nombre de Usuario *</label>
+                    <input type="text" id="usuarioNombre" required placeholder="Ejemplo: juan_perez">
+                    <small style="color: var(--text-light); display: block; margin-top: 5px;">
+                        ℹ️ Este será el usuario para iniciar sesión
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label>Contraseña *</label>
+                    <input type="password" id="usuarioPassword" required>
+                </div>
+                
+                <!-- Campo de rol SIEMPRE VISIBLE -->
+                <div class="form-group" id="rolField">
+                    <label>Rol del Usuario *</label>
+                    <select id="usuarioRol" required>
+                        <option value="">Seleccione un rol...</option>
+                        <option value="subdirector">Subdirector</option>
+                        <option value="jefe">Jefe de Departamento</option>
+                        <option value="docente">Docente</option>
+                    </select>
+                    <small style="color: var(--text-light); display: block; margin-top: 5px;">
+                        ℹ️ Seleccione el rol que tendrá este usuario en el sistema
+                    </small>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Guardar Usuario</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Detalles Docente -->
+    <div id="modalDetalleDocente" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detalles del Docente</h3>
+                <button class="modal-close" id="closeModalDetalle">&times;</button>
+            </div>
+            <div id="contenidoDetalle"></div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/views/SubdirectorView.js"></script>
+    
+    <script type="module">
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const btnLogout = document.getElementById('btnLogout');
+                if (btnLogout) {
+                    const newBtn = btnLogout.cloneNode(true);
+                    btnLogout.parentNode.replaceChild(newBtn, btnLogout);
+                    
+                    newBtn.addEventListener('click', () => {
+                        localStorage.removeItem('usuarioSesion');
+                        window.location.href = '../index.html';
+                    });
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>
